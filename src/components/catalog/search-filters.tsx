@@ -34,9 +34,9 @@ import { formatCurrency } from '@/lib/utils';
 const filterFormSchema = z.object({
   search: z.string().optional(),
   category: z.string().optional(),
-  status: z.array(z.string()).default([]),
-  priceRange: z.array(z.number()).length(2),
-  inStock: z.boolean().default(false),
+  status: z.array(z.string()).optional(),
+  priceRange: z.array(z.number()).length(2).optional(),
+  inStock: z.boolean().optional(),
 });
 
 type FilterFormValues = z.infer<typeof filterFormSchema>;
@@ -64,13 +64,16 @@ export function SearchFilters({
     },
   });
 
-  const onSubmit = (data: FilterFormValues) => {
-    onFiltersChange(data);
-  };
+  const onSubmit = React.useCallback(
+    (data: FilterFormValues) => {
+      onFiltersChange(data);
+    },
+    [onFiltersChange]
+  );
 
   // Debounce form changes
   React.useEffect(() => {
-    const subscription = form.watch((value) => {
+    const subscription = form.watch(() => {
       const timeoutId = setTimeout(() => {
         form.handleSubmit(onSubmit)();
       }, 500);
@@ -156,8 +159,8 @@ export function SearchFilters({
                                 checked={field.value?.includes(status)}
                                 onCheckedChange={(checked) => {
                                   const newValue = checked
-                                    ? [...field.value, status]
-                                    : field.value.filter((s) => s !== status);
+                                    ? [...(field.value ?? []), status]
+                                    : (field.value ?? []).filter((s) => s !== status);
                                   field.onChange(newValue);
                                 }}
                               />
@@ -188,8 +191,8 @@ export function SearchFilters({
                             onValueChange={field.onChange}
                           />
                           <div className="flex justify-between text-sm">
-                            <span>{formatCurrency(field.value[0])}</span>
-                            <span>{formatCurrency(field.value[1])}</span>
+                            <span>{formatCurrency((field.value ?? [])[0])}</span>
+                            <span>{formatCurrency((field.value ?? [])[1])}</span>
                           </div>
                         </div>
                       </FormItem>

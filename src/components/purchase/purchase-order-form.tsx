@@ -30,9 +30,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { Trash2, Plus, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/utils/inventory';
 
 // Form schema

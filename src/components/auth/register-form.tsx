@@ -80,7 +80,7 @@ export function RegisterForm() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push('/auth/login');
-    } catch (err) {
+    } catch {
       setError('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);

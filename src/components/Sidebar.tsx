@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
@@ -15,39 +14,55 @@ const NavItemComponent = ({ item, isActive }: { item: NavItem; isActive: boolean
   const hasChildren = item.children && item.children.length > 0;
   const pathname = usePathname();
 
+  const handleToggle = () => {
+    if (hasChildren) {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  const buttonContent = (
+    <Button
+      variant={isActive ? "secondary" : "ghost"}
+      className={cn(
+        "w-full justify-between",
+        isActive && "bg-primary/10 text-primary"
+      )}
+      onClick={handleToggle}
+    >
+      <span className="flex items-center">
+        <item.icon className="mr-2 h-4 w-4" />
+        {item.label}
+      </span>
+      {hasChildren && (
+        <span className="ml-auto">
+          {isOpen ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
+        </span>
+      )}
+    </Button>
+  );
+
   return (
     <div>
-      <Button
-        variant={isActive ? "secondary" : "ghost"}
-        className={cn(
-          "w-full justify-between",
-          isActive && "bg-muted"
-        )}
-        onClick={() => hasChildren && setIsOpen(!isOpen)}
-      >
-        <span className="flex items-center">
-          <item.icon className="mr-2 h-4 w-4" />
-          {item.label}
-        </span>
-        {hasChildren && (
-          <span className="ml-auto">
-            {isOpen ? (
-              <ChevronDown className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
-          </span>
-        )}
-      </Button>
+      {hasChildren ? (
+        buttonContent
+      ) : (
+        <Link href={item.href}>
+          {buttonContent}
+        </Link>
+      )}
       {hasChildren && isOpen && (
         <div className="ml-4 mt-1 space-y-1">
-          {item.children.map((child) => (
+          {item.children?.map((child) => (
             <Link key={child.href} href={child.href}>
               <Button
                 variant="ghost"
                 className={cn(
                   "w-full justify-start pl-6",
-                  pathname === child.href && "bg-muted"
+                  pathname === child.href && "bg-primary/10 text-primary"
                 )}
               >
                 {child.label}

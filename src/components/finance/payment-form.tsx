@@ -51,7 +51,8 @@ const defaultValues: Partial<PaymentFormValues> = {
   description: '',
 };
 
-interface PaymentFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PaymentFormProps {
+  className?: string;
   onSubmit?: (data: PaymentFormValues) => Promise<void>;
 }
 
@@ -84,7 +85,7 @@ export function PaymentForm({
         variant: 'success',
       });
       form.reset(defaultValues);
-    } catch (error) {
+    } catch {
       toast({
         title: 'Error',
         description: 'Failed to process payment. Please try again.',

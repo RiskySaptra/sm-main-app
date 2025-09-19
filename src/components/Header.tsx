@@ -17,6 +17,7 @@ import { Input } from './ui/input';
 import { Bell, Search, Settings, User, LogOut, HelpCircle } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { getInitials } from '@/lib/utils';
+import Breadcrumb from '@/components/breadcrumb';
 
 const Header = () => {
   const user = {
@@ -26,31 +27,23 @@ const Header = () => {
   };
 
   return (
-    <Card className="rounded-none border-b">
-      <CardContent className="p-4 flex justify-between items-center">
-        <div className="flex items-center flex-1 max-w-xl">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="pl-8"
-            />
-          </div>
-        </div>
+    <header className="p-4 flex justify-between items-center border-b">
+      <div className="flex items-center space-x-4">
+        <Breadcrumb />
+      </div>
 
-        <div className="flex items-center space-x-4">
-          <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative"
-          >
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 h-2 w-2 bg-red-600 rounded-full" />
-          </Button>
+      <div className="flex items-center space-x-4">
+        <ThemeToggle />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative"
+        >
+          <Bell className="h-5 w-5" />
+          <span className="absolute top-1 right-1 h-2 w-2 bg-red-600 rounded-full" />
+        </Button>
 
-          <DropdownMenu>
+        <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
@@ -94,8 +87,7 @@ const Header = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </CardContent>
-    </Card>
+    </header>
   );
 };
 

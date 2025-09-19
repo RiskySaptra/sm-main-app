@@ -15,16 +15,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/lib/utils';
 import { MoreVertical, Edit, Trash, Eye } from 'lucide-react';
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'OUT_OF_STOCK';
-  category: string;
-  imageUrl: string;
-}
+import { Product, ProductStatus } from '@/lib/types';
 
 interface ProductGridProps {
   products: Product[];
@@ -34,9 +25,9 @@ interface ProductGridProps {
 }
 
 const statusColors = {
-  ACTIVE: 'bg-green-100 text-green-800',
-  INACTIVE: 'bg-gray-100 text-gray-800',
-  OUT_OF_STOCK: 'bg-red-100 text-red-800',
+  [ProductStatus.PUBLISHED]: 'bg-green-100 text-green-800',
+  [ProductStatus.DRAFT]: 'bg-gray-100 text-gray-800',
+  [ProductStatus.ARCHIVED]: 'bg-red-100 text-red-800',
 };
 
 export function ProductGrid({ products, onEdit, onDelete, onView }: ProductGridProps) {
@@ -47,7 +38,7 @@ export function ProductGrid({ products, onEdit, onDelete, onView }: ProductGridP
           <CardHeader className="p-0">
             <div className="relative aspect-square">
               <Image
-                src={product.imageUrl}
+                src={product.thumbnailUrl || '/images/placeholder.png'}
                 alt={product.name}
                 fill
                 className="object-cover"
@@ -105,7 +96,7 @@ export function ProductGrid({ products, onEdit, onDelete, onView }: ProductGridP
               {product.status}
             </Badge>
             <p className="font-semibold">
-              {formatCurrency(product.price)}
+              {formatCurrency(product.basePrice)}
             </p>
           </CardFooter>
         </Card>

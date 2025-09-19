@@ -57,7 +57,7 @@ export function LoginForm() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push('/dashboard');
-    } catch (err) {
+    } catch {
       setError('Invalid email or password');
     } finally {
       setIsLoading(false);

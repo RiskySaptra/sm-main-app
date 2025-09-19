@@ -38,8 +38,6 @@ import {
   Clock,
   Search,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatCurrency } from '@/lib/utils/inventory';
 import { FulfillmentOrder } from '@/lib/types';
 
 // Form schema

@@ -15,8 +15,6 @@ import { Label } from '@/components/ui/label';
 import {
   AlertCircle,
   AlertTriangle,
-  Bell,
-  BellOff,
   CheckCircle2,
   Info,
 } from 'lucide-react';

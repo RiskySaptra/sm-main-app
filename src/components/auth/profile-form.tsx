@@ -85,7 +85,7 @@ export function ProfileForm() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setSuccess('Profile updated successfully');
-    } catch (err) {
+    } catch {
       setError('Failed to update profile. Please try again.');
     } finally {
       setIsLoading(false);

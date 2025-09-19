@@ -1,9 +1,7 @@
 import {
-  Home,
   ShoppingCart,
   Package,
   Users,
-  FileText,
   Boxes,
   CreditCard,
   TrendingUp,
@@ -23,13 +21,13 @@ export const mainNavItems = [
     { href: '/inventory/stock', label: 'Stock Levels' },
     { href: '/inventory/movements', label: 'Stock Movements' },
   ]},
-  { href: '/sales-orders', icon: ShoppingCart, label: 'Sales Orders', children: [
-    { href: '/sales-orders/new', label: 'New Order' },
-    { href: '/sales-orders/list', label: 'Order List' },
+  { href: '/sales', icon: ShoppingCart, label: 'Sales Orders', children: [
+    { href: '/sales', label: 'New Order' },
+    { href: '/sales-orders', label: 'Order List' },
   ]},
-  { href: '/purchase-orders', icon: Truck, label: 'Purchase Orders', children: [
-    { href: '/purchase-orders/new', label: 'New Order' },
-    { href: '/purchase-orders/list', label: 'Order List' },
+  { href: '/purchase', icon: Truck, label: 'Purchase Orders', children: [
+    { href: '/purchase', label: 'New Order' },
+    { href: '/purchase-orders', label: 'Order List' },
     { href: '/purchase-orders/suppliers', label: 'Suppliers' },
   ]},
   { href: '/finance', icon: CreditCard, label: 'Finance', children: [
@@ -42,13 +40,12 @@ export const mainNavItems = [
 export const backofficeNavItems = [
   { href: '/backoffice/stores', icon: Building2, label: 'Stores' },
   { href: '/backoffice/users', icon: Users, label: 'Users' },
-  { href: '/backoffice/reports', icon: TrendingUp, label: 'Reports' },
-  { href: '/backoffice/settings', icon: Settings, label: 'Settings' },
+  { href: '/backoffice/invoices', icon: TrendingUp, label: 'Invoices' },
 ];
 
 export type NavItem = {
   href: string;
-  icon: any;
+  icon: React.ElementType;
   label: string;
   children?: { href: string; label: string }[];
 };
