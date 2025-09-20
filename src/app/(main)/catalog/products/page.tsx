@@ -1,21 +1,14 @@
 'use client';
 
-'use client';
-
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { PageLayout } from '../_components/page-layout';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,82 +17,94 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Filter } from 'lucide-react';
-import { Product } from '@/lib/types';
-import { PageHeader } from '@/components/catalog/page-header';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { mockProducts } from '@/lib/mock-data';
+import { Product } from '@/lib/types';
+import { MoreHorizontal } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const products: Omit<Product, 'description' | 'images' | 'thumbnailUrl'>[] = mockProducts;
+const products: Product[] = mockProducts;
 
-const ProductsPage = () => {
-  const router = useRouter();
-
-  const handleAddProduct = () => {
-    router.push('/catalog/products/new');
-  };
-
+export default function ProductsPage() {
   return (
-    <div className="container mx-auto py-8">
-      <PageHeader
-        title="Products"
-        actionButtonText="Create Product"
-        onActionButtonClick={handleAddProduct}
-      />
-      <div className="flex items-center space-x-2 mb-4">
-        <Input placeholder="Search products..." className="w-64" />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <Filter className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Category</DropdownMenuItem>
-            <DropdownMenuItem>Price</DropdownMenuItem>
-            <DropdownMenuItem>Stock</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <Table>
-        <TableCaption>A list of your products.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Category ID</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Brand</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>{product.categoryId}</TableCell>
-              <TableCell>${product.basePrice.toFixed(2)}</TableCell>
-              <TableCell>{product.status}</TableCell>
-              <TableCell>{product.brand}</TableCell>
-              <TableCell>
-                <Button variant="outline" size="sm" className="mr-2" asChild>
-                  <Link href={`/catalog/products/${product.id}`}>View</Link>
-                </Button>
-                <Button variant="outline" size="sm" className="mr-2">
-                  Edit
-                </Button>
-                <Button variant="destructive" size="sm">
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <PageLayout
+      title="Products"
+      action={{ href: '/catalog/products/new', label: 'Create Product' }}
+    >
+      <Card>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Image</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Brand</TableHead>
+                <TableHead>
+                  <span className="sr-only">Actions</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {products.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell>
+                    <Image
+                      alt={product.name}
+                      className="aspect-square rounded-md object-cover"
+                      height="64"
+                      src={product.thumbnailUrl || '/placeholder.svg'}
+                      width="64"
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>{product.status}</TableCell>
+                  <TableCell>${product.basePrice.toFixed(2)}</TableCell>
+                  <TableCell>{product.brand}</TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          aria-haspopup="true"
+                          size="icon"
+                          variant="ghost"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Toggle menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href={`/catalog/products/${product.id}/edit`}>
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/catalog/products/${product.id}`}>
+                            View
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </PageLayout>
   );
-};
-
-export default ProductsPage;
+}

@@ -14,6 +14,7 @@ import {
 export const mainNavItems = [
   { href: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/catalog', icon: Package, label: 'Catalog', children: [
+    { href: '/catalog', label: 'Catalog' },
     { href: '/catalog/products', label: 'Products' },
     { href: '/catalog/categories', label: 'Categories' },
   ]},
