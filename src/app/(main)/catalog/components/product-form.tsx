@@ -19,9 +19,9 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Product, ProductStatus } from '@/lib/types';
-import { zodResolver } from '@hookform/resolvers/zod';
+// import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { z } from 'zod';
 
@@ -44,13 +44,15 @@ const formSchema = z.object({
   })).optional(),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 interface ProductFormProps {
   product?: Product;
 }
 
 export function ProductForm({ product }: ProductFormProps) {
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     // resolver: zodResolver(formSchema),
     defaultValues: {
       ...product,
@@ -79,7 +81,7 @@ export function ProductForm({ product }: ProductFormProps) {
     name: 'variants',
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const specificationsObject = data.specifications?.reduce(
       (obj, item) => {
         obj[item.key] = item.value;

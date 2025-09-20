@@ -93,8 +93,7 @@ export function TransactionHistory({
       accessorKey: 'amount',
       header: 'Amount',
       cell: ({ row }) => {
-        const amount = row.getValue('amount') as number;
-        const currency = row.getValue('currency') as string;
+        const amount = row.getValue('amount') as number; 
         const type = row.getValue('type') as string;
         const isIncoming = [
           TransactionType.PAYMENT,
@@ -107,8 +106,7 @@ export function TransactionHistory({
               'text-red-600': !isIncoming,
             })}
           >
-            {isIncoming ? '+' : '-'}
-            {formatCurrency(amount, currency)}
+            {isIncoming ? '+' : '-'} 
           </span>
         );
       },
@@ -200,7 +198,7 @@ export function TransactionHistory({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {formatCurrency(summary.totalIncoming, 'USD')}
+              {formatCurrency(summary.totalIncoming, 'IDR')}
             </div>
           </CardContent>
         </Card>
@@ -213,7 +211,7 @@ export function TransactionHistory({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              {formatCurrency(summary.totalOutgoing, 'USD')}
+              {formatCurrency(summary.totalOutgoing, 'IDR')}
             </div>
           </CardContent>
         </Card>

@@ -12,7 +12,7 @@ export default function CategoriesPage() {
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
   const router = useRouter();
 
-  const handleAddCategory = (parentId: string | null) => {
+  const handleAddCategory = () => {
     router.push('/catalog/categories/new');
   };
 

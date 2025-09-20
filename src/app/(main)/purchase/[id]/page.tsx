@@ -4,7 +4,6 @@ import * as React from 'react';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -179,13 +178,13 @@ export default function PurchaseOrderDetailPage({
                     <TableCell>
                       {new Intl.NumberFormat('en-US', {
                         style: 'currency',
-                        currency: 'USD',
+                        currency: 'IDR',
                       }).format(item.unitPrice)}
                     </TableCell>
                     <TableCell>
                       {new Intl.NumberFormat('en-US', {
                         style: 'currency',
-                        currency: 'USD',
+                        currency: 'IDR',
                       }).format(item.total)}
                     </TableCell>
                   </TableRow>
@@ -230,7 +229,7 @@ export default function PurchaseOrderDetailPage({
                 <span>
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
-                    currency: 'USD',
+                    currency: 'IDR',
                   }).format(order.subtotal)}
                 </span>
               </div>
@@ -239,7 +238,7 @@ export default function PurchaseOrderDetailPage({
                 <span>
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
-                    currency: 'USD',
+                    currency: 'IDR',
                   }).format(order.tax)}
                 </span>
               </div>
@@ -248,7 +247,7 @@ export default function PurchaseOrderDetailPage({
                 <span>
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
-                    currency: 'USD',
+                    currency: 'IDR',
                   }).format(order.shipping)}
                 </span>
               </div>
@@ -257,7 +256,7 @@ export default function PurchaseOrderDetailPage({
                 <span>
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
-                    currency: 'USD',
+                    currency: 'IDR',
                   }).format(order.total)}
                 </span>
               </div>

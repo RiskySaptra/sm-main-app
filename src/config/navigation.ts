@@ -6,7 +6,6 @@ import {
   CreditCard,
   TrendingUp,
   Truck,
-  Settings,
   Building2,
   LayoutDashboard,
 } from 'lucide-react';

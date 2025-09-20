@@ -203,7 +203,7 @@ export function OrderCreationForm({
                           <SelectContent>
                             {mockProducts.map((product) => (
                               <SelectItem key={product.id} value={product.id}>
-                                {product.name} - {formatCurrency(product.price, 'USD')}
+                                {product.name} - {formatCurrency(product.price, 'IDR')}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -302,7 +302,7 @@ export function OrderCreationForm({
           </CardContent>
           <CardFooter className="flex justify-between">
             <div className="text-lg font-semibold">
-              Total: {formatCurrency(orderTotal, 'USD')}
+              Total: {formatCurrency(orderTotal, 'IDR')}
             </div>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Creating Order...' : 'Create Order'}

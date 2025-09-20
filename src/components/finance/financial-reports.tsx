@@ -111,7 +111,7 @@ export function FinancialReports({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatCurrency(revenue.total, 'USD')}
+              {formatCurrency(revenue.total, 'IDR')}
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               {revenue.trend === 'up' ? (
@@ -141,7 +141,7 @@ export function FinancialReports({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatCurrency(expenses.total, 'USD')}
+              {formatCurrency(expenses.total, 'IDR')}
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               {expenses.trend === 'up' ? (
@@ -171,7 +171,7 @@ export function FinancialReports({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatCurrency(profit.total, 'USD')}
+              {formatCurrency(profit.total, 'IDR')}
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               {profit.trend === 'up' ? (
@@ -215,7 +215,7 @@ export function FinancialReports({
                     <div className="flex items-center justify-between text-sm">
                       <span>{item.category}</span>
                       <span className="font-medium">
-                        {formatCurrency(item.amount, 'USD')}
+                        {formatCurrency(item.amount, 'IDR')}
                       </span>
                     </div>
                     <div className="h-2 rounded-full bg-secondary">
@@ -249,7 +249,7 @@ export function FinancialReports({
                     <div className="flex items-center justify-between text-sm">
                       <span>{item.category}</span>
                       <span className="font-medium">
-                        {formatCurrency(item.amount, 'USD')}
+                        {formatCurrency(item.amount, 'IDR')}
                       </span>
                     </div>
                     <div className="h-2 rounded-full bg-secondary">

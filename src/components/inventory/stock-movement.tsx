@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
-import { formatDate } from '@/lib/utils';
 import {
   ArrowDownCircle,
   ArrowUpCircle,
@@ -87,7 +86,6 @@ const columns: ColumnDef<StockMovement>[] = [
     header: 'Quantity',
     cell: ({ row }) => {
       const quantity = row.getValue('quantity') as number;
-      const type = row.getValue('type') as string;
       const isPositive = quantity > 0;
 
       return (

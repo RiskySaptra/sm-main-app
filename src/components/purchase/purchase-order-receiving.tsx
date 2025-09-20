@@ -56,7 +56,6 @@ import {
 import {
   PurchaseOrder,
   PurchaseOrderItem,
-  ReceiptStatus,
 } from '@/app/(main)/purchase/_lib/types';
 import { mockPurchaseOrders, mockSuppliers } from '@/lib/mock-data';
 

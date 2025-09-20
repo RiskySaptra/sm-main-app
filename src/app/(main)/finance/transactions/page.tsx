@@ -13,7 +13,7 @@ const mockTransactions: Transaction[] = [
     date: '2024-03-15T10:00:00Z',
     type: TransactionType.PAYMENT,
     amount: 100,
-    currency: 'USD',
+    currency: 'IDR',
     status: TransactionStatus.COMPLETED,
     reference: 'INV-001',
   },

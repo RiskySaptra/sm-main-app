@@ -47,7 +47,7 @@ const paymentFormSchema = z.object({
 type PaymentFormValues = z.infer<typeof paymentFormSchema>;
 
 const defaultValues: Partial<PaymentFormValues> = {
-  currency: 'USD',
+  currency: 'IDR',
   description: '',
 };
 
@@ -143,7 +143,7 @@ export function PaymentForm({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="USD">USD - US Dollar</SelectItem>
+                        <SelectItem value="IDR">IDR - Indonesian Rupiah</SelectItem>
                         <SelectItem value="EUR">EUR - Euro</SelectItem>
                         <SelectItem value="GBP">GBP - British Pound</SelectItem>
                         <SelectItem value="JPY">JPY - Japanese Yen</SelectItem>

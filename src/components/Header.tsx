@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Bell, Search, Settings, User, LogOut, HelpCircle } from 'lucide-react';
+import { Bell, Settings, User, LogOut, HelpCircle } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { getInitials } from '@/lib/utils';
 import Breadcrumb from '@/components/breadcrumb';

@@ -131,7 +131,7 @@ export function OrderTracking({
       header: 'Total',
       cell: ({ row }) => {
         const amount = row.getValue('total') as number;
-        return formatCurrency(amount, 'USD');
+        return formatCurrency(amount, 'IDR');
       },
     },
     {
@@ -200,7 +200,7 @@ export function OrderTracking({
           <CardContent>
             <div className="text-2xl font-bold">{orders.length}</div>
             <p className="text-xs text-muted-foreground">
-              Total Value: {formatCurrency(summary.total, 'USD')}
+              Total Value: {formatCurrency(summary.total, 'IDR')}
             </p>
           </CardContent>
         </Card>
@@ -339,10 +339,10 @@ export function OrderTracking({
                         </div>
                         <div className="text-right">
                           <p className="font-medium">
-                            {formatCurrency(item.unitPrice * item.quantity, 'USD')}
+                            {formatCurrency(item.unitPrice * item.quantity, 'IDR')}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {formatCurrency(item.unitPrice, 'USD')} each
+                            {formatCurrency(item.unitPrice, 'IDR')} each
                           </p>
                         </div>
                       </div>
@@ -356,7 +356,7 @@ export function OrderTracking({
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">Total</h3>
                   <p className="text-xl font-bold">
-                    {formatCurrency(selectedOrder.total, 'USD')}
+                    {formatCurrency(selectedOrder.total, 'IDR')}
                   </p>
                 </div>
               </div>

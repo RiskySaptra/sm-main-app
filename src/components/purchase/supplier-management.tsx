@@ -57,7 +57,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Supplier, SupplierStatus } from '@/app/(main)/purchase/_lib/types';
-import { mockSuppliers } from '@/lib/mock-data';
 
 // Form schema
 const supplierFormSchema = z.object({

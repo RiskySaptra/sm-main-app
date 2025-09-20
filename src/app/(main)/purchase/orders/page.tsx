@@ -50,7 +50,7 @@ const columns: ColumnDef<PurchaseOrder>[] = [
       const total = parseFloat(row.getValue('total'));
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'IDR',
       }).format(total);
     },
   },
