@@ -166,6 +166,7 @@ export default function PurchaseOrderDetailPage({
                   <TableHead>Received</TableHead>
                   <TableHead>Unit Price</TableHead>
                   <TableHead>Total</TableHead>
+                  <TableHead>Batch Number</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -187,6 +188,7 @@ export default function PurchaseOrderDetailPage({
                         currency: 'IDR',
                       }).format(item.total)}
                     </TableCell>
+                    <TableCell>{item.batchNumber || 'N/A'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
