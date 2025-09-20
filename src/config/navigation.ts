@@ -43,6 +43,7 @@ export const mainNavItems = [
 ];
 
 export const backofficeNavItems = [
+  { href: '/backoffice', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/backoffice/stores', icon: Building2, label: 'Stores' },
   { href: '/backoffice/users', icon: Users, label: 'Users' },
   { href: '/backoffice/invoices', icon: TrendingUp, label: 'Invoices' },
