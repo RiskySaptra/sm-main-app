@@ -32,40 +32,34 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { Trash2, Plus, Star } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils/inventory';
+import { mockSuppliers } from '@/lib/mock-data';
 
 // Form schema
 const orderItemSchema = z.object({
-  itemName: z.string().min(1, 'Item name is required'),
-  description: z.string().optional(),
+  inventoryItemId: z.string().min(1, 'Item name is required'),
   quantity: z.number().min(1, 'Quantity must be at least 1'),
   unitPrice: z.number().min(0, 'Unit price must be positive'),
-  unit: z.string().min(1, 'Unit is required'),
 });
 
 const purchaseOrderSchema = z.object({
   supplierId: z.string().min(1, 'Supplier is required'),
-  deliveryDate: z.string().min(1, 'Delivery date is required'),
-  shippingAddress: z.string().min(5, 'Shipping address is required'),
+  expectedDeliveryDate: z.date(),
+  deliveryAddress: z.object({
+    street: z.string().min(1, 'Street is required'),
+    city: z.string().min(1, 'City is required'),
+    state: z.string().min(1, 'State is required'),
+    zipCode: z.string().min(1, 'Zip code is required'),
+    country: z.string().min(1, 'Country is required'),
+  }),
   items: z.array(orderItemSchema).min(1, 'At least one item is required'),
-  paymentTerms: z.string().min(1, 'Payment terms are required'),
+  terms: z.object({
+    paymentTerms: z.string().min(1, 'Payment terms are required'),
+    shippingTerms: z.string().min(1, 'Shipping terms are required'),
+  }),
   notes: z.string().optional(),
 });
 
-type PurchaseOrderFormValues = z.infer<typeof purchaseOrderSchema>;
-
-// Mock data
-interface Supplier {
-  id: string;
-  name: string;
-  preferredSupplier: boolean;
-  paymentTerms: string;
-}
-
-const mockSuppliers: Supplier[] = [
-  { id: '1', name: 'Supplier A', preferredSupplier: true, paymentTerms: 'net_30' },
-  { id: '2', name: 'Supplier B', preferredSupplier: false, paymentTerms: 'net_60' },
-  { id: '3', name: 'Supplier C', preferredSupplier: true, paymentTerms: 'immediate' },
-];
+export type PurchaseOrderFormValues = z.infer<typeof purchaseOrderSchema>;
 
 interface PurchaseOrderFormProps {
   onSubmit: (data: PurchaseOrderFormValues) => void;
@@ -81,11 +75,9 @@ export function PurchaseOrderForm({
     defaultValues: {
       items: [
         {
-          itemName: '',
-          description: '',
+          inventoryItemId: '',
           quantity: 1,
           unitPrice: 0,
-          unit: 'pcs',
         },
       ],
     },
@@ -106,8 +98,8 @@ export function PurchaseOrderForm({
   // Update payment terms when supplier changes
   const handleSupplierChange = (value: string) => {
     const supplier = mockSuppliers.find((s) => s.id === value);
-    if (supplier) {
-      form.setValue('paymentTerms', supplier.paymentTerms);
+    if (supplier && supplier.paymentTerms) {
+      form.setValue('terms.paymentTerms', supplier.paymentTerms.paymentTerms);
     }
   };
 
@@ -141,7 +133,7 @@ export function PurchaseOrderForm({
                       {mockSuppliers.map((supplier) => (
                         <SelectItem key={supplier.id} value={supplier.id}>
                           <div className="flex items-center gap-2">
-                            {supplier.preferredSupplier && (
+                            {supplier.rating > 4 && (
                               <Star className="h-4 w-4 text-yellow-500" />
                             )}
                             {supplier.name}
@@ -158,12 +150,17 @@ export function PurchaseOrderForm({
             <div className="grid gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
-                name="deliveryDate"
+                name="expectedDeliveryDate"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Expected Delivery Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="date"
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -172,7 +169,7 @@ export function PurchaseOrderForm({
 
               <FormField
                 control={form.control}
-                name="paymentTerms"
+                name="terms.paymentTerms"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Payment Terms</FormLabel>
@@ -197,7 +194,7 @@ export function PurchaseOrderForm({
 
             <FormField
               control={form.control}
-              name="shippingAddress"
+              name="deliveryAddress.street"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Shipping Address</FormLabel>
@@ -222,29 +219,12 @@ export function PurchaseOrderForm({
                 <div className="grid gap-4 md:grid-cols-2">
                   <FormField
                     control={form.control}
-                    name={`items.${index}.itemName`}
+                    name={`items.${index}.inventoryItemId`}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Item Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter item name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.description`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter item description"
-                            {...field}
-                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -269,33 +249,6 @@ export function PurchaseOrderForm({
                             }
                           />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`items.${index}.unit`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Unit</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select unit" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="pcs">Pieces</SelectItem>
-                            <SelectItem value="kg">Kilograms</SelectItem>
-                            <SelectItem value="m">Meters</SelectItem>
-                            <SelectItem value="l">Liters</SelectItem>
-                          </SelectContent>
-                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -341,7 +294,7 @@ export function PurchaseOrderForm({
                   {formatCurrency(
                     (form.watch(`items.${index}.quantity`) || 0) *
                       (form.watch(`items.${index}.unitPrice`) || 0),
-                    'USD'
+                    'USD',
                   )}
                 </div>
               </div>
@@ -354,11 +307,9 @@ export function PurchaseOrderForm({
               className="mt-2"
               onClick={() =>
                 append({
-                  itemName: '',
-                  description: '',
+                  inventoryItemId: '',
                   quantity: 1,
                   unitPrice: 0,
-                  unit: 'pcs',
                 })
               }
             >

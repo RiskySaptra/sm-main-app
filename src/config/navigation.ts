@@ -14,27 +14,21 @@ import {
 export const mainNavItems = [
   { href: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/catalog', icon: Package, label: 'Catalog', children: [
-    { href: '/catalog', label: 'Catalog' },
     { href: '/catalog/products', label: 'Products' },
     { href: '/catalog/categories', label: 'Categories' },
   ]},
-  { href: '/inventory', icon: Boxes, label: 'Inventory', children: [
-    { href: '/inventory/stock', label: 'Stock Levels' },
-    { href: '/inventory/movements', label: 'Stock Movements' },
-  ]},
-  { href: '/sales', icon: ShoppingCart, label: 'Sales Orders', children: [
+  { href: '/inventory', icon: Boxes, label: 'Inventory' },
+  { href: '/sales-orders', icon: ShoppingCart, label: 'Sales Orders', children: [
     { href: '/sales', label: 'New Order' },
     { href: '/sales-orders', label: 'Order List' },
   ]},
-  { href: '/purchase', icon: Truck, label: 'Purchase Orders', children: [
-    { href: '/purchase', label: 'New Order' },
-    { href: '/purchase-orders', label: 'Order List' },
-    { href: '/purchase-orders/suppliers', label: 'Suppliers' },
+  { href: '/purchase/orders', icon: Truck, label: 'Purchase Order', children: [
+    { href: '/purchase', label: 'Dashboard' },
+    { href: '/purchase/new', label: 'New Order' },
+    { href: '/purchase/orders', label: 'Order List' },
   ]},
   { href: '/finance', icon: CreditCard, label: 'Finance', children: [
     { href: '/finance/transactions', label: 'Transactions' },
-    { href: '/finance/payments', label: 'Payments' },
-    { href: '/finance/reports', label: 'Reports' },
   ]},
 ];
 

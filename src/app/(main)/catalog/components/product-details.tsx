@@ -15,14 +15,7 @@ import { useParams } from 'next/navigation';
 import { Pencil } from 'lucide-react';
 import { useProduct } from '../_lib/hooks/use-product';
 
-export default function ProductDetails() {
-  const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id;
-
-  if (!id) {
-    return <div>Product not found</div>;
-  }
-
+function ProductDetailsContent({ id }: { id: string }) {
   const { product, loading, error } = useProduct(id);
 
   if (loading) {
@@ -159,4 +152,15 @@ export default function ProductDetails() {
       </div>
     </div>
   );
+}
+
+export default function ProductDetails() {
+  const params = useParams();
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  if (!id) {
+    return <div>Product not found</div>;
+  }
+
+  return <ProductDetailsContent id={id} />;
 }

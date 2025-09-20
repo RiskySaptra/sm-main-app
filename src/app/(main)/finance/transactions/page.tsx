@@ -1,15 +1,20 @@
 'use client';
 
 import { TransactionHistory } from '@/components/finance/transaction-history';
+import {
+  Transaction,
+  TransactionStatus,
+  TransactionType,
+} from '@/app/(main)/finance/_lib/types';
 
-const mockTransactions = [
+const mockTransactions: Transaction[] = [
   {
     id: '1',
     date: '2024-03-15T10:00:00Z',
-    type: 'PAYMENT',
+    type: TransactionType.PAYMENT,
     amount: 100,
     currency: 'USD',
-    status: 'COMPLETED',
+    status: TransactionStatus.COMPLETED,
     reference: 'INV-001',
   },
 ];

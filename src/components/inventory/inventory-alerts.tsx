@@ -37,7 +37,7 @@ interface AlertPreference {
 }
 
 interface InventoryAlertsProps {
-  alerts: InventoryAlert[];
+  alerts: readonly InventoryAlert[];
   onMarkAsRead?: (alertId: string) => void;
   onResolve?: (alertId: string) => void;
 }

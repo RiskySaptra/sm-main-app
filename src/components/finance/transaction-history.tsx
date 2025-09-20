@@ -24,16 +24,11 @@ import {
 import { formatCurrency } from '@/lib/utils/inventory';
 import { cn } from '@/lib/utils';
 
-interface Transaction {
-  id: string;
-  date: string;
-  type: 'PAYMENT' | 'REFUND' | 'WITHDRAWAL' | 'DEPOSIT';
-  amount: number;
-  currency: string;
-  status: 'COMPLETED' | 'PENDING' | 'FAILED';
-  reference: string;
-  description?: string;
-}
+import {
+  Transaction,
+  TransactionType,
+  TransactionStatus,
+} from '@/app/(main)/finance/_lib/types';
 
 interface TransactionHistoryProps {
   transactions: Transaction[];
@@ -66,7 +61,10 @@ export function TransactionHistory({
       header: 'Type',
       cell: ({ row }) => {
         const type = row.getValue('type') as string;
-        const isIncoming = ['PAYMENT', 'DEPOSIT'].includes(type);
+        const isIncoming = [
+          TransactionType.PAYMENT,
+          TransactionType.DEPOSIT,
+        ].includes(type as TransactionType);
         return (
           <div className="flex items-center gap-2">
             {isIncoming ? (
@@ -77,10 +75,12 @@ export function TransactionHistory({
             <Badge
               variant="secondary"
               className={cn({
-                'bg-green-100 text-green-800': type === 'PAYMENT',
-                'bg-red-100 text-red-800': type === 'REFUND',
-                'bg-orange-100 text-orange-800': type === 'WITHDRAWAL',
-                'bg-blue-100 text-blue-800': type === 'DEPOSIT',
+                'bg-green-100 text-green-800':
+                  type === TransactionType.PAYMENT,
+                'bg-red-100 text-red-800': type === TransactionType.REFUND,
+                'bg-orange-100 text-orange-800':
+                  type === TransactionType.WITHDRAWAL,
+                'bg-blue-100 text-blue-800': type === TransactionType.DEPOSIT,
               })}
             >
               {type}
@@ -96,7 +96,10 @@ export function TransactionHistory({
         const amount = row.getValue('amount') as number;
         const currency = row.getValue('currency') as string;
         const type = row.getValue('type') as string;
-        const isIncoming = ['PAYMENT', 'DEPOSIT'].includes(type);
+        const isIncoming = [
+          TransactionType.PAYMENT,
+          TransactionType.DEPOSIT,
+        ].includes(type as TransactionType);
         return (
           <span
             className={cn('font-medium', {
@@ -119,9 +122,11 @@ export function TransactionHistory({
           <Badge
             variant="secondary"
             className={cn({
-              'bg-green-100 text-green-800': status === 'COMPLETED',
-              'bg-yellow-100 text-yellow-800': status === 'PENDING',
-              'bg-red-100 text-red-800': status === 'FAILED',
+              'bg-green-100 text-green-800':
+                status === TransactionStatus.COMPLETED,
+              'bg-yellow-100 text-yellow-800':
+                status === TransactionStatus.PENDING,
+              'bg-red-100 text-red-800': status === TransactionStatus.FAILED,
             })}
           >
             {status}
@@ -165,12 +170,16 @@ export function TransactionHistory({
   const summary = transactions.reduce(
     (acc, transaction) => {
       const amount = transaction.amount;
-      if (['PAYMENT', 'DEPOSIT'].includes(transaction.type)) {
+      if (
+        [TransactionType.PAYMENT, TransactionType.DEPOSIT].includes(
+          transaction.type,
+        )
+      ) {
         acc.totalIncoming += amount;
       } else {
         acc.totalOutgoing += amount;
       }
-      if (transaction.status === 'PENDING') {
+      if (transaction.status === TransactionStatus.PENDING) {
         acc.pendingCount += 1;
       }
       return acc;

@@ -56,7 +56,8 @@ import {
   StarOff,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Supplier } from '@/lib/types';
+import { Supplier, SupplierStatus } from '@/app/(main)/purchase/_lib/types';
+import { mockSuppliers } from '@/lib/mock-data';
 
 // Form schema
 const supplierFormSchema = z.object({
@@ -64,8 +65,14 @@ const supplierFormSchema = z.object({
   contactPerson: z.string().min(2, 'Contact person name is required'),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(10, 'Valid phone number is required'),
-  address: z.string().min(5, 'Address is required'),
-  category: z.string().min(1, 'Category is required'),
+  address: z.object({
+    street: z.string().min(1, 'Street is required'),
+    city: z.string().min(1, 'City is required'),
+    state: z.string().min(1, 'State is required'),
+    zipCode: z.string().min(1, 'Zip code is required'),
+    country: z.string().min(1, 'Country is required'),
+  }),
+  categories: z.array(z.string()).min(1, 'At least one category is required'),
   paymentTerms: z.string().min(1, 'Payment terms are required'),
 });
 
@@ -97,7 +104,7 @@ export function SupplierManagement({
         const supplier = row.original;
         return (
           <div className="flex items-center gap-2">
-            {supplier.preferredSupplier && (
+            {supplier.rating > 4 && (
               <Star className="h-4 w-4 text-yellow-500" />
             )}
             <span>{supplier.name}</span>
@@ -114,14 +121,22 @@ export function SupplierManagement({
       header: 'Email',
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'categories',
       header: 'Category',
       cell: ({ row }) => {
-        const category = row.getValue('category') as string;
+        const categories = row.getValue('categories') as string[] | undefined;
         return (
-          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-            {category}
-          </Badge>
+          <div className="flex flex-wrap gap-1">
+            {categories?.map((category) => (
+              <Badge
+                key={category}
+                variant="secondary"
+                className="bg-blue-100 text-blue-800"
+              >
+                {category}
+              </Badge>
+            ))}
+          </div>
         );
       },
     },
@@ -180,11 +195,11 @@ export function SupplierManagement({
               <DropdownMenuItem
                 onClick={() =>
                   onUpdateSupplier(supplier.id, {
-                    preferredSupplier: !supplier.preferredSupplier,
+                    rating: supplier.rating > 4 ? 3 : 5,
                   })
                 }
               >
-                {supplier.preferredSupplier ? (
+                {supplier.rating > 4 ? (
                   <>
                     <StarOff className="mr-2 h-4 w-4" />
                     Remove Preferred Status
@@ -200,7 +215,10 @@ export function SupplierManagement({
               <DropdownMenuItem
                 onClick={() =>
                   onUpdateSupplier(supplier.id, {
-                    status: supplier.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+                    status:
+                      supplier.status === 'ACTIVE'
+                        ? SupplierStatus.INACTIVE
+                        : SupplierStatus.ACTIVE,
                   })
                 }
               >
@@ -223,11 +241,11 @@ export function SupplierManagement({
   const summary = suppliers.reduce(
     (acc, supplier) => {
       if (supplier.status === 'ACTIVE') acc.active += 1;
-      if (supplier.preferredSupplier) acc.preferred += 1;
+      if (supplier.rating > 4) acc.preferred += 1;
       acc.total += 1;
       return acc;
     },
-    { total: 0, active: 0, preferred: 0 }
+    { total: 0, active: 0, preferred: 0 },
   );
 
   return (
@@ -273,7 +291,8 @@ export function SupplierManagement({
           <CardContent>
             <div className="text-2xl font-bold">{summary.preferred}</div>
             <p className="text-xs text-muted-foreground">
-              {((summary.preferred / summary.total) * 100).toFixed(1)}% of total
+              {((summary.preferred / summary.total) * 100).toFixed(1)}% of
+              total
             </p>
           </CardContent>
         </Card>
@@ -311,7 +330,10 @@ export function SupplierManagement({
                           <FormItem>
                             <FormLabel>Supplier Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter supplier name" {...field} />
+                              <Input
+                                placeholder="Enter supplier name"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -373,7 +395,7 @@ export function SupplierManagement({
 
                     <FormField
                       control={form.control}
-                      name="address"
+                      name="address.street"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Address</FormLabel>
@@ -391,13 +413,14 @@ export function SupplierManagement({
                     <div className="grid gap-4 md:grid-cols-2">
                       <FormField
                         control={form.control}
-                        name="category"
+                        name="categories"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Category</FormLabel>
                             <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              onValueChange={(value) =>
+                                field.onChange([value])
+                              }
                             >
                               <FormControl>
                                 <SelectTrigger>

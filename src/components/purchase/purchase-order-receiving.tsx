@@ -53,66 +53,17 @@ import {
   FileText,
   Truck,
 } from 'lucide-react';
-
-// Mock data types
-interface PurchaseOrderItem {
-  id: string;
-  name: string;
-  quantity: number;
-  unit: string;
-  receivedQuantity: number;
-  status: 'pending' | 'partial' | 'complete' | 'rejected';
-  qualityCheck?: {
-    passed: boolean;
-    notes?: string;
-  };
-}
-
-interface PurchaseOrder {
-  id: string;
-  supplierName: string;
-  orderDate: string;
-  expectedDeliveryDate: string;
-  status: 'pending' | 'in_transit' | 'received' | 'completed';
-  trackingNumber?: string;
-  items: PurchaseOrderItem[];
-}
-
-// Mock data
-const mockPurchaseOrders: PurchaseOrder[] = [
-  {
-    id: 'PO-2024-001',
-    supplierName: 'Supplier A',
-    orderDate: '2024-03-01',
-    expectedDeliveryDate: '2024-03-15',
-    status: 'in_transit',
-    trackingNumber: 'TRK123456789',
-    items: [
-      {
-        id: '1',
-        name: 'Item A',
-        quantity: 100,
-        unit: 'pcs',
-        receivedQuantity: 0,
-        status: 'pending',
-      },
-      {
-        id: '2',
-        name: 'Item B',
-        quantity: 50,
-        unit: 'kg',
-        receivedQuantity: 0,
-        status: 'pending',
-      },
-    ],
-  },
-  // Add more mock orders as needed
-];
+import {
+  PurchaseOrder,
+  PurchaseOrderItem,
+  ReceiptStatus,
+} from '@/app/(main)/purchase/_lib/types';
+import { mockPurchaseOrders, mockSuppliers } from '@/lib/mock-data';
 
 // Form schema for receiving items
 const receiveItemSchema = z.object({
   receivedQuantity: z.number().min(0, 'Quantity must be positive'),
-  qualityStatus: z.enum(['pass', 'fail']),
+  qualityStatus: z.enum(['RECEIVED', 'REJECTED']),
   notes: z.string().optional(),
 });
 
@@ -120,33 +71,34 @@ type ReceiveItemFormValues = z.infer<typeof receiveItemSchema>;
 
 // Status badge variants
 const statusVariants = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  partial: 'bg-blue-100 text-blue-800',
-  complete: 'bg-green-100 text-green-800',
-  rejected: 'bg-red-100 text-red-800',
-  in_transit: 'bg-purple-100 text-purple-800',
-  received: 'bg-teal-100 text-teal-800',
-  completed: 'bg-green-100 text-green-800',
+  DRAFT: 'bg-gray-100 text-gray-800',
+  PENDING: 'bg-yellow-100 text-yellow-800',
+  SENT: 'bg-blue-100 text-blue-800',
+  CONFIRMED: 'bg-purple-100 text-purple-800',
+  PARTIALLY_RECEIVED: 'bg-blue-100 text-blue-800',
+  RECEIVED: 'bg-green-100 text-green-800',
+  CANCELLED: 'bg-red-100 text-red-800',
+  REJECTED: 'bg-red-100 text-red-800',
 };
 
 interface PurchaseOrderReceivingProps {
+  order?: PurchaseOrder;
   onReceiveItems?: (
     orderId: string,
     itemId: string,
-    data: ReceiveItemFormValues
+    data: ReceiveItemFormValues,
   ) => void;
 }
 
 export function PurchaseOrderReceiving({
+  order,
   onReceiveItems,
 }: PurchaseOrderReceivingProps) {
   const { toast } = useToast();
-  const [selectedOrder, setSelectedOrder] = React.useState<PurchaseOrder | null>(
-    null
-  );
-  const [selectedItem, setSelectedItem] = React.useState<PurchaseOrderItem | null>(
-    null
-  );
+  const [selectedOrder, setSelectedOrder] =
+    React.useState<PurchaseOrder | null>(null);
+  const [selectedItem, setSelectedItem] =
+    React.useState<PurchaseOrderItem | null>(null);
   const [isReceivingDialogOpen, setIsReceivingDialogOpen] =
     React.useState(false);
 
@@ -154,7 +106,7 @@ export function PurchaseOrderReceiving({
     resolver: zodResolver(receiveItemSchema),
     defaultValues: {
       receivedQuantity: 0,
-      qualityStatus: 'pass',
+      qualityStatus: 'RECEIVED',
       notes: '',
     },
   });
@@ -165,86 +117,99 @@ export function PurchaseOrderReceiving({
     onReceiveItems?.(selectedOrder.id, selectedItem.id, data);
     toast({
       title: 'Items Received',
-      description: `Successfully received ${data.receivedQuantity} ${selectedItem.unit} of ${selectedItem.name}`,
+      description: `Successfully received ${data.receivedQuantity} of ${selectedItem.name}`,
     });
     setIsReceivingDialogOpen(false);
     form.reset();
   };
 
-  const openReceivingDialog = (order: PurchaseOrder, item: PurchaseOrderItem) => {
+  const openReceivingDialog = (
+    order: PurchaseOrder,
+    item: PurchaseOrderItem,
+  ) => {
     setSelectedOrder(order);
     setSelectedItem(item);
     form.reset({
       receivedQuantity: 0,
-      qualityStatus: 'pass',
+      qualityStatus: 'RECEIVED',
       notes: '',
     });
     setIsReceivingDialogOpen(true);
   };
 
+  const ordersToDisplay = order ? [order] : mockPurchaseOrders;
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {mockPurchaseOrders.length}
-            </div>
-          </CardContent>
-        </Card>
+      {!order && (
+        <div className="grid gap-4 md:grid-cols-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Total Orders
+              </CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {mockPurchaseOrders.length}
+              </div>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">In Transit</CardTitle>
-            <Truck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {
-                mockPurchaseOrders.filter(
-                  (order) => order.status === 'in_transit'
-                ).length
-              }
-            </div>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">In Transit</CardTitle>
+              <Truck className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {
+                  mockPurchaseOrders.filter(
+                    (order) => order.status === 'SENT',
+                  ).length
+                }
+              </div>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Receipt</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {
-                mockPurchaseOrders.filter(
-                  (order) => order.status === 'pending'
-                ).length
-              }
-            </div>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Pending Receipt
+              </CardTitle>
+              <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {
+                  mockPurchaseOrders.filter(
+                    (order) =>
+                      order.status === 'PENDING' ||
+                      order.status === 'PARTIALLY_RECEIVED',
+                  ).length
+                }
+              </div>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {
-                mockPurchaseOrders.filter(
-                  (order) => order.status === 'completed'
-                ).length
-              }
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Completed</CardTitle>
+              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {
+                  mockPurchaseOrders.filter(
+                    (order) => order.status === 'RECEIVED',
+                  ).length
+                }
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <Card>
         <CardHeader>
@@ -255,23 +220,26 @@ export function PurchaseOrderReceiving({
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockPurchaseOrders.map((order) => (
+            {ordersToDisplay.map((order) => (
               <Card key={order.id} className="overflow-hidden">
                 <CardHeader className="bg-muted/50">
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
                       <CardTitle className="text-lg">
-                        {order.supplierName}
+                        {
+                          mockSuppliers.find((s) => s.id === order.supplierId)
+                            ?.name
+                        }
                       </CardTitle>
                       <CardDescription>
                         Order ID: {order.id} | Expected Delivery:{' '}
-                        {order.expectedDeliveryDate}
+                        {order.expectedDeliveryDate.toLocaleDateString()}
                       </CardDescription>
                     </div>
                     <Badge
                       className={cn(
                         'text-xs',
-                        statusVariants[order.status]
+                        statusVariants[order.status],
                       )}
                     >
                       {order.status}
@@ -293,20 +261,16 @@ export function PurchaseOrderReceiving({
                       {order.items.map((item) => (
                         <TableRow key={item.id}>
                           <TableCell>{item.name}</TableCell>
-                          <TableCell>
-                            {item.quantity} {item.unit}
-                          </TableCell>
-                          <TableCell>
-                            {item.receivedQuantity} {item.unit}
-                          </TableCell>
+                          <TableCell>{item.quantity}</TableCell>
+                          <TableCell>{item.receivedQuantity}</TableCell>
                           <TableCell>
                             <Badge
                               className={cn(
                                 'text-xs',
-                                statusVariants[item.status]
+                                statusVariants[item.receiptStatus],
                               )}
                             >
-                              {item.status}
+                              {item.receiptStatus}
                             </Badge>
                           </TableCell>
                           <TableCell>
@@ -314,7 +278,7 @@ export function PurchaseOrderReceiving({
                               variant="outline"
                               size="sm"
                               onClick={() => openReceivingDialog(order, item)}
-                              disabled={order.status === 'completed'}
+                              disabled={order.status === 'RECEIVED'}
                             >
                               Receive Items
                             </Button>
@@ -357,7 +321,10 @@ export function PurchaseOrderReceiving({
                         <Input
                           type="number"
                           min={0}
-                          max={selectedItem.quantity - selectedItem.receivedQuantity}
+                          max={
+                            selectedItem.quantity -
+                            selectedItem.receivedQuantity
+                          }
                           {...field}
                           onChange={(e) =>
                             field.onChange(parseInt(e.target.value, 10))
@@ -385,8 +352,8 @@ export function PurchaseOrderReceiving({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="pass">Pass</SelectItem>
-                          <SelectItem value="fail">Fail</SelectItem>
+                          <SelectItem value="RECEIVED">Pass</SelectItem>
+                          <SelectItem value="REJECTED">Fail</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

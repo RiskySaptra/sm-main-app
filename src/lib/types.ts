@@ -88,16 +88,6 @@ export interface PaymentData {
   [key: string]: unknown;
 }
 
-export interface Transaction {
-  id: string;
-  date: string;
-  type: 'PAYMENT' | 'REFUND' | 'WITHDRAWAL' | 'DEPOSIT';
-  amount: number;
-  currency: string;
-  status: 'COMPLETED' | 'PENDING' | 'FAILED';
-  reference: string;
-  description?: string;
-}
 
 export interface RevenueMetric {
   total: number;
@@ -133,19 +123,6 @@ export interface PurchaseOrderData {
   [key: string]: unknown;
 }
 
-export interface Supplier {
-  id: string;
-  name: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-  address: string;
-  category: string;
-  status: 'ACTIVE' | 'INACTIVE';
-  rating: number;
-  paymentTerms: string;
-  preferredSupplier: boolean;
-}
 
 export interface OrderItem {
   productId: string;

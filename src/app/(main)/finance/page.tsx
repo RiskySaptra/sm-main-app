@@ -8,41 +8,45 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import {
   PaymentData,
-  Transaction,
   RevenueMetric,
   ExpenseMetric,
   ProfitMetric,
 } from '@/lib/types';
+import {
+  Transaction,
+  TransactionStatus,
+  TransactionType,
+} from '@/app/(main)/finance/_lib/types';
 
 // Mock data
 const mockTransactions: Transaction[] = [
   {
     id: '1',
     date: '2024-03-15T10:30:00',
-    type: 'PAYMENT',
+    type: TransactionType.PAYMENT,
     amount: 1500.00,
     currency: 'USD',
-    status: 'COMPLETED',
+    status: TransactionStatus.COMPLETED,
     reference: 'INV-2024-001',
     description: 'Product purchase payment',
   },
   {
     id: '2',
     date: '2024-03-14T15:45:00',
-    type: 'REFUND',
+    type: TransactionType.REFUND,
     amount: 250.00,
     currency: 'USD',
-    status: 'PENDING',
+    status: TransactionStatus.PENDING,
     reference: 'REF-2024-001',
     description: 'Customer refund request',
   },
   {
     id: '3',
     date: '2024-03-14T09:15:00',
-    type: 'DEPOSIT',
+    type: TransactionType.DEPOSIT,
     amount: 5000.00,
     currency: 'USD',
-    status: 'COMPLETED',
+    status: TransactionStatus.COMPLETED,
     reference: 'DEP-2024-001',
     description: 'Bank transfer deposit',
   },

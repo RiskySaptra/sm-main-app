@@ -5,7 +5,11 @@ import { SupplierManagement } from '@/components/purchase/supplier-management';
 import { PurchaseOrderForm } from '@/components/purchase/purchase-order-form';
 import { PurchaseOrderReceiving } from '@/components/purchase/purchase-order-receiving';
 import { useToast } from '@/hooks/use-toast';
-import { PurchaseOrderData, Supplier } from '@/lib/types';
+import { PurchaseOrderData } from '@/lib/types';
+import {
+  Supplier,
+  SupplierStatus,
+} from '@/app/(main)/purchase/_lib/types';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs';
 
 interface SupplierData {
@@ -18,28 +22,48 @@ const mockSuppliers: Supplier[] = [
   {
     id: '1',
     name: 'Supplier A',
+    storeId: 'STORE-1',
+    code: 'SUP-A',
     contactPerson: 'John Doe',
     email: 'john.doe@suppliera.com',
     phone: '123-456-7890',
-    address: '123 Main St, Anytown, USA',
-    category: 'Raw Materials',
-    status: 'ACTIVE',
+    address: {
+      street: '123 Supplier St',
+      city: 'Supply City',
+      state: 'CA',
+      zipCode: '12345',
+      country: 'USA',
+    },
+    status: SupplierStatus.ACTIVE,
+    categories: ['Raw Materials'],
     rating: 4.5,
-    paymentTerms: 'Net 30',
-    preferredSupplier: true,
+    createdAt: new Date('2023-01-15T09:00:00Z'),
+    updatedAt: new Date('2023-01-15T09:00:00Z'),
+    totalOrderValue: 15000,
+    orderCount: 10,
   },
   {
     id: '2',
     name: 'Supplier B',
+    storeId: 'STORE-1',
+    code: 'SUP-B',
     contactPerson: 'Jane Smith',
     email: 'jane.smith@supplierb.com',
     phone: '098-765-4321',
-    address: '456 Oak Ave, Othertown, USA',
-    category: 'Packaging',
-    status: 'INACTIVE',
+    address: {
+      street: '456 Supplier Ave',
+      city: 'Supply City',
+      state: 'CA',
+      zipCode: '12345',
+      country: 'USA',
+    },
+    status: SupplierStatus.INACTIVE,
+    categories: ['Packaging'],
     rating: 3.8,
-    paymentTerms: 'Net 60',
-    preferredSupplier: false,
+    createdAt: new Date('2023-02-20T10:00:00Z'),
+    updatedAt: new Date('2023-02-20T10:00:00Z'),
+    totalOrderValue: 25000,
+    orderCount: 15,
   },
 ];
 
@@ -77,16 +101,17 @@ export default function PurchasePage() {
     itemId: string,
     data: {
       receivedQuantity: number;
-      qualityStatus: 'pass' | 'fail';
+      qualityStatus: 'RECEIVED' | 'REJECTED';
       notes?: string;
     }
   ) => {
     console.log('Receiving items:', { orderId, itemId, data });
-    const status = data.qualityStatus === 'pass' ? 'accepted' : 'rejected';
+    const status =
+      data.qualityStatus === 'RECEIVED' ? 'accepted' : 'rejected';
     toast({
       title: 'Items Received',
       description: `${data.receivedQuantity} items ${status} for order ${orderId}`,
-      variant: data.qualityStatus === 'pass' ? 'default' : 'destructive',
+      variant: data.qualityStatus === 'RECEIVED' ? 'default' : 'destructive',
     });
   };
 

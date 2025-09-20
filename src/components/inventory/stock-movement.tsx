@@ -21,17 +21,8 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react';
-
-interface StockMovement {
-  id: string;
-  productName: string;
-  type: 'PURCHASE' | 'SALE' | 'RETURN' | 'ADJUSTMENT' | 'TRANSFER';
-  quantity: number;
-  date: string;
-  reference: string;
-  notes: string;
-  status: 'COMPLETED' | 'PENDING' | 'CANCELLED';
-}
+import type { StockMovement } from '@/app/(main)/inventory/_lib/types';
+import { mockInventoryItems } from '@/lib/mock-data';
 
 interface StockMovementProps {
   movements: StockMovement[];
@@ -40,8 +31,15 @@ interface StockMovementProps {
 
 const columns: ColumnDef<StockMovement>[] = [
   {
-    accessorKey: 'productName',
+    accessorKey: 'inventoryItemId',
     header: 'Product',
+    cell: ({ row }) => {
+      const inventoryItemId = row.getValue('inventoryItemId') as string;
+      const product = mockInventoryItems.find(
+        (item) => item.id === inventoryItemId,
+      );
+      return product ? product.name : 'Unknown Product';
+    },
   },
   {
     accessorKey: 'type',
@@ -90,7 +88,7 @@ const columns: ColumnDef<StockMovement>[] = [
     cell: ({ row }) => {
       const quantity = row.getValue('quantity') as number;
       const type = row.getValue('type') as string;
-      const isPositive = ['PURCHASE', 'RETURN'].includes(type);
+      const isPositive = quantity > 0;
 
       return (
         <div className="flex items-center gap-1">
@@ -100,41 +98,28 @@ const columns: ColumnDef<StockMovement>[] = [
             <TrendingDown className="h-4 w-4 text-red-600" />
           )}
           <span className={isPositive ? 'text-green-600' : 'text-red-600'}>
-            {isPositive ? '+' : '-'}{Math.abs(quantity)}
+            {isPositive ? '+' : ''}
+            {quantity}
           </span>
         </div>
       );
     },
   },
   {
-    accessorKey: 'date',
+    accessorKey: 'createdAt',
     header: 'Date',
-    cell: ({ row }) => formatDate(row.getValue('date')),
+    cell: ({ row }) => {
+      const date = row.getValue('createdAt') as Date;
+      return date.toLocaleDateString();
+    },
   },
   {
-    accessorKey: 'reference',
+    accessorKey: 'referenceNumber',
     header: 'Reference',
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.getValue('status') as string;
-      const statusConfig = {
-        COMPLETED: 'bg-green-100 text-green-800',
-        PENDING: 'bg-yellow-100 text-yellow-800',
-        CANCELLED: 'bg-red-100 text-red-800',
-      };
-
-      return (
-        <Badge
-          variant="secondary"
-          className={statusConfig[status as keyof typeof statusConfig]}
-        >
-          {status}
-        </Badge>
-      );
-    },
+    accessorKey: 'performedBy',
+    header: 'Performed By',
   },
 ];
 
@@ -142,22 +127,20 @@ export function StockMovement({ movements, onAddMovement }: StockMovementProps) 
   // Calculate movement statistics
   const stats = movements.reduce(
     (acc, movement) => {
-      if (movement.status === 'COMPLETED') {
-        switch (movement.type) {
-          case 'PURCHASE':
-            acc.totalPurchases += movement.quantity;
-            break;
-          case 'SALE':
-            acc.totalSales += movement.quantity;
-            break;
-          case 'RETURN':
-            acc.totalReturns += movement.quantity;
-            break;
-        }
+      switch (movement.type) {
+        case 'PURCHASE':
+          acc.totalPurchases += movement.quantity;
+          break;
+        case 'SALE':
+          acc.totalSales += movement.quantity;
+          break;
+        case 'RETURN':
+          acc.totalReturns += movement.quantity;
+          break;
       }
       return acc;
     },
-    { totalPurchases: 0, totalSales: 0, totalReturns: 0 }
+    { totalPurchases: 0, totalSales: 0, totalReturns: 0 },
   );
 
   return (
@@ -227,7 +210,7 @@ export function StockMovement({ movements, onAddMovement }: StockMovementProps) 
           <DataTable
             columns={columns}
             data={movements}
-            searchKey="productName"
+            searchKey="inventoryItemId"
           />
         </CardContent>
       </Card>

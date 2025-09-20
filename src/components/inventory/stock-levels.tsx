@@ -14,23 +14,13 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, AlertTriangle } from 'lucide-react';
 import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
-
-interface StockItem {
-  id: string;
-  name: string;
-  sku: string;
-  currentStock: number;
-  minimumStock: number;
-  maximumStock: number;
-  status: 'ACTIVE' | 'DISCONTINUED' | 'OUT_OF_STOCK';
-  lastUpdated: string;
-}
+import { InventoryItem } from '@/app/(main)/inventory/_lib/types';
 
 interface StockLevelsProps {
-  items: StockItem[];
+  items: InventoryItem[];
 }
 
-const columns: ColumnDef<StockItem>[] = [
+const columns: ColumnDef<InventoryItem>[] = [
   {
     accessorKey: 'name',
     header: 'Product Name',
@@ -40,7 +30,7 @@ const columns: ColumnDef<StockItem>[] = [
     header: 'SKU',
   },
   {
-    accessorKey: 'currentStock',
+    accessorKey: 'quantity',
     header: 'Current Stock',
   },
   {
@@ -69,31 +59,35 @@ const columns: ColumnDef<StockItem>[] = [
     header: 'Stock Level',
     cell: ({ row }) => {
       const item = row.original;
-      const percentage = (item.currentStock / item.maximumStock) * 100;
-      
+      const percentage = (item.quantity / item.optimalStock) * 100;
+
       return (
         <div className="w-full max-w-xs">
           <Progress value={percentage} className="h-2" />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>{item.currentStock}</span>
-            <span>{item.maximumStock}</span>
+            <span>{item.quantity}</span>
+            <span>{item.optimalStock}</span>
           </div>
         </div>
       );
     },
   },
   {
-    accessorKey: 'lastUpdated',
+    accessorKey: 'updatedAt',
     header: 'Last Updated',
+    cell: ({ row }) => {
+      const date = row.getValue('updatedAt') as Date;
+      return date.toLocaleDateString();
+    },
   },
 ];
 
 export function StockLevels({ items }: StockLevelsProps) {
   const lowStockItems = items.filter(
-    (item) => item.currentStock <= item.minimumStock && item.currentStock > 0
+    (item) => item.quantity <= item.reorderPoint && item.quantity > 0,
   );
   const outOfStockItems = items.filter(
-    (item) => item.currentStock === 0 || item.status === 'OUT_OF_STOCK'
+    (item) => item.quantity === 0 || item.status === 'OUT_OF_STOCK',
   );
 
   return (
@@ -110,7 +104,7 @@ export function StockLevels({ items }: StockLevelsProps) {
           </Alert>
         )}
         {lowStockItems.length > 0 && (
-          <Alert variant="warning" className="border-yellow-200 bg-yellow-50 text-yellow-800">
+          <Alert className="border-yellow-200 bg-yellow-50 text-yellow-800">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Low Stock Warning</AlertTitle>
             <AlertDescription>

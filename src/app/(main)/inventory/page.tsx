@@ -7,73 +7,7 @@ import { StockMovement } from '@/components/inventory/stock-movement';
 import { InventoryAlerts } from '@/components/inventory/inventory-alerts';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-
-// Mock data for demonstration
-const mockStockItems = [
-  {
-    id: '1',
-    name: 'Product A',
-    sku: 'SKU001',
-    currentStock: 50,
-    minimumStock: 20,
-    maximumStock: 100,
-    status: 'ACTIVE',
-    lastUpdated: '2024-03-15T10:00:00Z',
-  },
-  {
-    id: '2',
-    name: 'Product B',
-    sku: 'SKU002',
-    currentStock: 15,
-    minimumStock: 30,
-    maximumStock: 150,
-    status: 'ACTIVE',
-    lastUpdated: '2024-03-15T09:30:00Z',
-  },
-  {
-    id: '3',
-    name: 'Product C',
-    sku: 'SKU003',
-    currentStock: 0,
-    minimumStock: 10,
-    maximumStock: 50,
-    status: 'OUT_OF_STOCK',
-    lastUpdated: '2024-03-15T08:45:00Z',
-  },
-] as const;
-
-const mockMovements = [
-  {
-    id: '1',
-    productName: 'Product A',
-    type: 'PURCHASE',
-    quantity: 50,
-    date: '2024-03-15T10:00:00Z',
-    reference: 'PO-001',
-    notes: 'Regular stock replenishment',
-    status: 'COMPLETED',
-  },
-  {
-    id: '2',
-    productName: 'Product B',
-    type: 'SALE',
-    quantity: 25,
-    date: '2024-03-15T09:30:00Z',
-    reference: 'SO-001',
-    notes: 'Customer order',
-    status: 'COMPLETED',
-  },
-  {
-    id: '3',
-    productName: 'Product C',
-    type: 'ADJUSTMENT',
-    quantity: -5,
-    date: '2024-03-15T08:45:00Z',
-    reference: 'ADJ-001',
-    notes: 'Damaged inventory removal',
-    status: 'COMPLETED',
-  },
-] as const;
+import { mockInventoryItems, mockStockMovements } from '@/lib/mock-data';
 
 const mockAlerts = [
   {
@@ -147,11 +81,11 @@ export default function InventoryPage() {
           <TabsTrigger value="alerts">Alerts</TabsTrigger>
         </TabsList>
         <TabsContent value="stock" className="mt-6">
-          <StockLevels items={mockStockItems} />
+          <StockLevels items={mockInventoryItems} />
         </TabsContent>
         <TabsContent value="movements" className="mt-6">
           <StockMovement
-            movements={mockMovements}
+            movements={mockStockMovements}
             onAddMovement={handleAddMovement}
           />
         </TabsContent>
