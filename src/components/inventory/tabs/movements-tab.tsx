@@ -4,14 +4,15 @@ import * as React from 'react';
 import { StockMovement } from '@/components/inventory/stock-movement';
 import { mockStockMovements } from '@/lib/mock-data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { StockMovement as StockMovementType } from '@/app/(main)/inventory/_lib/types';
 
 export function MovementsTab() {
   const [loading, setLoading] = React.useState(true);
-  const [movements, setMovements] = React.useState([]);
+  const [movements, setMovements] = React.useState<StockMovementType[]>([]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setMovements(mockStockMovements as any);
+      setMovements(mockStockMovements);
       setLoading(false);
     }, 500); // Simulate network delay
     return () => clearTimeout(timer);

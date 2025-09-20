@@ -4,7 +4,17 @@ import * as React from 'react';
 import { InventoryAlerts } from '@/components/inventory/inventory-alerts';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const mockAlerts = [
+interface InventoryAlert {
+  id: string;
+  type: 'LOW_STOCK' | 'OUT_OF_STOCK' | 'SYSTEM';
+  title: string;
+  message: string;
+  timestamp: string;
+  status: 'UNREAD' | 'READ';
+  priority: 'HIGH' | 'LOW';
+}
+
+const mockAlerts: readonly InventoryAlert[] = [
   {
     id: '1',
     type: 'LOW_STOCK',
@@ -32,15 +42,15 @@ const mockAlerts = [
     status: 'READ',
     priority: 'LOW',
   },
-] as const;
+];
 
 export function AlertsTab() {
   const [loading, setLoading] = React.useState(true);
-  const [alerts, setAlerts] = React.useState([]);
+  const [alerts, setAlerts] = React.useState<readonly InventoryAlert[]>([]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setAlerts(mockAlerts as any);
+      setAlerts(mockAlerts);
       setLoading(false);
     }, 500); // Simulate network delay
     return () => clearTimeout(timer);

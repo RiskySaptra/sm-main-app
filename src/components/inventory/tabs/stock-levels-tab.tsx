@@ -4,14 +4,15 @@ import * as React from 'react';
 import { StockLevels } from '@/components/inventory/stock-levels';
 import { mockInventoryItems } from '@/lib/mock-data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { InventoryItem } from '@/app/(main)/inventory/_lib/types';
 
 export function StockLevelsTab() {
   const [loading, setLoading] = React.useState(true);
-  const [items, setItems] = React.useState([]);
+  const [items, setItems] = React.useState<InventoryItem[]>([]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setItems(mockInventoryItems as any);
+      setItems(mockInventoryItems);
       setLoading(false);
     }, 500); // Simulate network delay
     return () => clearTimeout(timer);
