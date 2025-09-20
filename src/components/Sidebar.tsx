@@ -61,7 +61,7 @@ const NavItemComponent = ({ item, isActive }: { item: NavItem; isActive: boolean
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start pl-6",
+                  "w-full justify-start pl-6 my-1",
                   pathname === child.href && "bg-primary/10 text-primary"
                 )}
               >

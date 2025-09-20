@@ -21,14 +21,17 @@ export const mainNavItems = [
   ]},
   { href: '/inventory', icon: Boxes, label: 'Inventory' },
   { href: '/sales-orders', icon: ShoppingCart, label: 'Sales Orders', children: [
-    { href: '/sales', label: 'New Order' },
+    { href: '/sales', label: 'Order Overview' },
     { href: '/sales-orders', label: 'Order List' },
+    { href: '/sales-orders/fulfillment', label: 'Fulfillment' },
+    { href: '/sales/pos', label: 'POS' },
   ]},
   { href: '/purchase/orders', icon: Truck, label: 'Purchase Order', children: [
-    { href: '/purchase', label: 'Dashboard' },
-    { href: '/purchase/new', label: 'New Order' },
+    { href: '/purchase', label: 'Purchase Overview' },
     { href: '/purchase/orders', label: 'Order List' },
+    { href: '/purchase/receive', label: 'Receive' },
   ]},
+  { href: '/suppliers', icon: Building2, label: 'Suppliers' },
   { href: '/finance', icon: CreditCard, label: 'Finance', children: [
     { href: '/finance/transactions', label: 'Transactions' },
   ]},

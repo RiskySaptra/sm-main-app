@@ -56,6 +56,7 @@ export interface PurchaseOrderItem {
   name: string;
   quantity: number;
   receivedQuantity: number;
+  batchNumber?: string;
   unitPrice: number;
   subtotal: number;
   tax: number;

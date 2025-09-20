@@ -12,11 +12,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -36,7 +31,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle>Store Details</CardTitle>
               <CardDescription>
-                Update your store's information here.
+                Update your store&apos;s information here.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -121,7 +116,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle>Security</CardTitle>
               <CardDescription>
-                Manage your account's security settings.
+                Manage your account&apos;s security settings.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

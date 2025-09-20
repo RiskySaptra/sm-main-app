@@ -14,13 +14,66 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, AlertTriangle } from 'lucide-react';
 import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
-import { InventoryItem } from '@/app/(main)/inventory/_lib/types';
+import { InventoryItem, Batch } from '@/app/(main)/inventory/_lib/types';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 interface StockLevelsProps {
   items: InventoryItem[];
 }
 
+const BatchDetails = ({ batches }: { batches: Batch[] }) => (
+  <div className="p-4 bg-gray-50">
+    <h4 className="font-semibold mb-2">Batches</h4>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Batch Number</TableHead>
+          <TableHead>Quantity</TableHead>
+          <TableHead>Expiry Date</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {batches.map((batch) => (
+          <TableRow key={batch.id}>
+            <TableCell>{batch.batchNumber}</TableCell>
+            <TableCell>{batch.quantity}</TableCell>
+            <TableCell>
+              {batch.expiryDate
+                ? new Date(batch.expiryDate).toLocaleDateString()
+                : 'N/A'}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+);
+
 const columns: ColumnDef<InventoryItem>[] = [
+  {
+    id: 'expander',
+    header: () => null,
+    cell: ({ row }) => {
+      return row.getCanExpand() ? (
+        <button
+          {...{
+            onClick: row.getToggleExpandedHandler(),
+            style: { cursor: 'pointer' },
+          }}
+        >
+          {row.getIsExpanded() ? <ChevronDown /> : <ChevronRight />}
+        </button>
+      ) : null;
+    },
+  },
   {
     accessorKey: 'name',
     header: 'Product Name',
@@ -162,6 +215,10 @@ export function StockLevels({ items }: StockLevelsProps) {
             columns={columns}
             data={items}
             searchKey="name"
+            renderSubComponent={({ row }) => (
+              <BatchDetails batches={row.original.batches} />
+            )}
+            getRowCanExpand={() => true}
           />
         </CardContent>
       </Card>

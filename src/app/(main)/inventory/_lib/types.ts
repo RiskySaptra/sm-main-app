@@ -12,6 +12,15 @@ export enum MovementType {
   TRANSFER = 'TRANSFER',
 }
 
+export interface Batch {
+  id: string;
+  inventoryItemId: string;
+  batchNumber: string;
+  expiryDate?: Date;
+  quantity: number;
+  createdAt: Date;
+}
+
 export interface InventoryItem {
   id: string;
   sku: string;
@@ -19,7 +28,7 @@ export interface InventoryItem {
   name: string;
   description: string;
   price: number;
-  quantity: number;
+  quantity: number; // This will now be a computed value from batches
   reorderPoint: number;
   optimalStock: number;
   status: ItemStatus;
@@ -34,6 +43,7 @@ export interface InventoryItem {
   version: number;
   lastStockUpdate?: Date;
   lastOrderDate?: Date;
+  batches: Batch[];
 }
 
 export interface StockMovement {

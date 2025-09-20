@@ -25,6 +25,7 @@ import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { z } from 'zod';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),

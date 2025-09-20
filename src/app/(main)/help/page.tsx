@@ -63,7 +63,7 @@ export default function HelpPage() {
             <CardHeader>
               <CardTitle>Contact Support</CardTitle>
               <CardDescription>
-                If you can't find an answer in the FAQ, please fill out the form
+                If you can&apos;t find an answer in the FAQ, please fill out the form
                 below.
               </CardDescription>
             </CardHeader>
