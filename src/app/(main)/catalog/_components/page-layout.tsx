@@ -13,7 +13,7 @@ interface PageLayoutProps {
 
 export function PageLayout({ title, action, children }: PageLayoutProps) {
   return (
-    <div className="mx-auto py-5">
+    <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">{title}</h1>
         {action && (
