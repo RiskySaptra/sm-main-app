@@ -15,6 +15,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  Row,
 } from '@tanstack/react-table';
 
 import {
@@ -41,8 +42,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey?: string;
-  renderSubComponent?: (props: { row: any }) => React.ReactElement;
-  getRowCanExpand?: (row: any) => boolean;
+  renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
+  getRowCanExpand?: (row: Row<TData>) => boolean;
 }
 
 export function DataTable<TData, TValue>({

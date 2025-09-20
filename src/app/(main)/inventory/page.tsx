@@ -4,16 +4,19 @@ import * as React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { StockLevelsTab } from '@/components/inventory/tabs/stock-levels-tab';
 import { MovementsTab } from '@/components/inventory/tabs/movements-tab';
 import { AlertsTab } from '@/components/inventory/tabs/alerts-tab';
+import { BatchesTab } from '@/components/inventory/tabs/batches-tab';
+import { useRouter } from 'next/navigation';
+import InventoryOverviewPage from './overview/page';
 
 export default function InventoryPage() {
   const [activeTab, setActiveTab] = React.useState('stock');
 
+  const router = useRouter();
+
   const handleAddMovement = () => {
-    // TODO: Implement add movement functionality
-    console.log('Add movement clicked');
+    router.push('/inventory/movements/new');
   };
 
   return (
@@ -34,13 +37,17 @@ export default function InventoryPage() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+        <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
           <TabsTrigger value="stock">Stock Levels</TabsTrigger>
+          <TabsTrigger value="batches">Batches</TabsTrigger>
           <TabsTrigger value="movements">Movements</TabsTrigger>
           <TabsTrigger value="alerts">Alerts</TabsTrigger>
         </TabsList>
         <TabsContent value="stock" className="mt-6">
-          <StockLevelsTab />
+          <InventoryOverviewPage />
+        </TabsContent>
+        <TabsContent value="batches" className="mt-6">
+          <BatchesTab />
         </TabsContent>
         <TabsContent value="movements" className="mt-6">
           <MovementsTab />

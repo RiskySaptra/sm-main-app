@@ -19,7 +19,12 @@ export const mainNavItems = [
     { href: '/catalog/products', label: 'Products' },
     { href: '/catalog/categories', label: 'Categories' },
   ]},
-  { href: '/inventory', icon: Boxes, label: 'Inventory' },
+  { href: '/inventory', icon: Boxes, label: 'Inventory', children: [
+    { href: '/inventory', label: 'Inventory Overview' },
+    { href: '/inventory/stock-levels', label: 'Stock Levels' },
+    { href: '/inventory/batches', label: 'Batches' },
+    { href: '/inventory/movements', label: 'Movements' },
+  ]},
   { href: '/sales-orders', icon: ShoppingCart, label: 'Sales Orders', children: [
     { href: '/sales', label: 'Order Overview' },
     { href: '/sales-orders', label: 'Order List' },
