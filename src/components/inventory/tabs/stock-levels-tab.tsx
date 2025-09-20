@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { StockLevels } from '@/components/inventory/stock-levels';
-import { mockInventoryItems } from '@/lib/mock-data';
+import { mockInventoryItems } from '@/lib/mocks/inventory';
 import { Skeleton } from '@/components/ui/skeleton';
 import { InventoryItem } from '@/app/(main)/inventory/_lib/types';
 

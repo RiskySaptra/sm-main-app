@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { DollarSign, Truck, Package, AlertCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
-import { mockPurchaseOrders } from '@/lib/mock-data';
+import { mockPurchaseOrders } from '@/lib/mocks/purchase';
 import { PurchaseOrderStatus } from './_lib/types';
 
 export default function PurchasePage() {
@@ -18,7 +18,7 @@ export default function PurchasePage() {
     0
   );
   const pendingOrders = mockPurchaseOrders.filter(
-    (order) => order.status === PurchaseOrderStatus.PENDING
+    (order) => order.status === PurchaseOrderStatus.CONFIRMED
   ).length;
   const overdueOrders = mockPurchaseOrders.filter(
     (order) =>

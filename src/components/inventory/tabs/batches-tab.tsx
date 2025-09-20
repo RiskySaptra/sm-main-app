@@ -4,7 +4,7 @@ import * as React from 'react';
 import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Batch } from '@/app/(main)/inventory/_lib/types';
-import { mockInventoryItems } from '@/lib/mock-data';
+import { mockInventoryItems } from '@/lib/mocks/inventory';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const columns: ColumnDef<Batch>[] = [

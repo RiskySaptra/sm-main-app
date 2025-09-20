@@ -21,59 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 
-const mockSalesOrders: SalesOrder[] = [
-  {
-    id: '1',
-    orderNumber: 'SO-001',
-    storeId: 'STORE-1',
-    customerId: 'CUST-1',
-    status: OrderStatus.DELIVERED,
-    paymentStatus: PaymentStatus.PAID,
-    subtotal: 100,
-    tax: 10,
-    shipping: 5,
-    total: 115,
-    shippingAddress: {},
-    billingAddress: {},
-    items: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    orderNumber: 'SO-002',
-    storeId: 'STORE-1',
-    customerId: 'CUST-2',
-    status: OrderStatus.SHIPPED,
-    paymentStatus: PaymentStatus.PAID,
-    subtotal: 200,
-    tax: 20,
-    shipping: 10,
-    total: 230,
-    shippingAddress: {},
-    billingAddress: {},
-    items: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '3',
-    orderNumber: 'POS-001',
-    storeId: 'STORE-1',
-    customerId: 'Walk-in Customer',
-    status: OrderStatus.DELIVERED,
-    paymentStatus: PaymentStatus.PAID,
-    subtotal: 50,
-    tax: 5,
-    shipping: 0,
-    total: 55,
-    shippingAddress: {},
-    billingAddress: {},
-    items: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
+import { mockSalesOrders } from '@/lib/mocks/sales';
 
 const columns: ColumnDef<SalesOrder>[] = [
   {

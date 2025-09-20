@@ -4,6 +4,8 @@ import * as React from 'react';
 import { InventoryAlerts } from '@/components/inventory/inventory-alerts';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { mockInventoryItems } from '@/lib/mocks/inventory';
+
 interface InventoryAlert {
   id: string;
   type: 'LOW_STOCK' | 'OUT_OF_STOCK' | 'SYSTEM';
@@ -14,43 +16,41 @@ interface InventoryAlert {
   priority: 'HIGH' | 'LOW';
 }
 
-const mockAlerts: readonly InventoryAlert[] = [
-  {
-    id: '1',
-    type: 'LOW_STOCK',
-    title: 'Low Stock Alert',
-    message: 'Product B is below minimum stock level',
-    timestamp: '2024-03-15T09:30:00Z',
-    status: 'UNREAD',
-    priority: 'HIGH',
-  },
-  {
-    id: '2',
-    type: 'OUT_OF_STOCK',
-    title: 'Out of Stock Alert',
-    message: 'Product C is out of stock',
-    timestamp: '2024-03-15T08:45:00Z',
-    status: 'UNREAD',
-    priority: 'HIGH',
-  },
-  {
-    id: '3',
-    type: 'SYSTEM',
-    title: 'System Notification',
-    message: 'Inventory system maintenance scheduled for tonight',
-    timestamp: '2024-03-15T08:00:00Z',
-    status: 'READ',
-    priority: 'LOW',
-  },
-];
-
 export function AlertsTab() {
   const [loading, setLoading] = React.useState(true);
   const [alerts, setAlerts] = React.useState<readonly InventoryAlert[]>([]);
 
   React.useEffect(() => {
+    const generatedAlerts = mockInventoryItems
+      .map((item) => {
+        if (item.quantity <= 0) {
+          return {
+            id: `out-of-stock-${item.id}`,
+            type: 'OUT_OF_STOCK',
+            title: 'Out of Stock Alert',
+            message: `${item.name} is out of stock`,
+            timestamp: new Date().toISOString(),
+            status: 'UNREAD',
+            priority: 'HIGH',
+          } as InventoryAlert;
+        }
+        if (item.quantity <= item.reorderPoint) {
+          return {
+            id: `low-stock-${item.id}`,
+            type: 'LOW_STOCK',
+            title: 'Low Stock Alert',
+            message: `${item.name} is below the reorder point (${item.reorderPoint})`,
+            timestamp: new Date().toISOString(),
+            status: 'UNREAD',
+            priority: 'HIGH',
+          } as InventoryAlert;
+        }
+        return null;
+      })
+      .filter((alert): alert is InventoryAlert => alert !== null);
+
     const timer = setTimeout(() => {
-      setAlerts(mockAlerts);
+      setAlerts(generatedAlerts);
       setLoading(false);
     }, 500); // Simulate network delay
     return () => clearTimeout(timer);
