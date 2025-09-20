@@ -10,8 +10,8 @@ export function formatDate(date: Date | string, formatString: string = "PPP") {
   return format(new Date(date), formatString)
 }
 
-export function formatCurrency(amount: number, currency: string = "USD") {
-  return new Intl.NumberFormat("en-US", {
+export function formatCurrency(amount: number, currency: string = "IDR") {
+  return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency,
   }).format(amount)

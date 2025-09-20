@@ -15,8 +15,8 @@ export function formatDate(date: string | Date): string {
 /**
  * Format a number as currency
  */
-export function formatCurrency(amount: number, currency: string = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
+export function formatCurrency(amount: number, currency: string = 'IDR'): string {
+  return new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency,
   }).format(amount);

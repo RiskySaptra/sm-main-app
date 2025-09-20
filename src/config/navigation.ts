@@ -8,6 +8,9 @@ import {
   Truck,
   Building2,
   LayoutDashboard,
+  Settings,
+  User,
+  HelpCircle,
 } from 'lucide-react';
 
 export const mainNavItems = [
@@ -35,6 +38,9 @@ export const backofficeNavItems = [
   { href: '/backoffice/stores', icon: Building2, label: 'Stores' },
   { href: '/backoffice/users', icon: Users, label: 'Users' },
   { href: '/backoffice/invoices', icon: TrendingUp, label: 'Invoices' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
+  { href: '/profile', icon: User, label: 'Profile' },
+  { href: '/help', icon: HelpCircle, label: 'Help' },
 ];
 
 export type NavItem = {

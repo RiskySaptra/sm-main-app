@@ -106,7 +106,7 @@ export function TransactionHistory({
               'text-red-600': !isIncoming,
             })}
           >
-            {isIncoming ? '+' : '-'} 
+            {isIncoming ? '+' : '-'} {formatCurrency(amount)}
           </span>
         );
       },
@@ -198,7 +198,7 @@ export function TransactionHistory({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {formatCurrency(summary.totalIncoming, 'IDR')}
+              {formatCurrency(summary.totalIncoming)}
             </div>
           </CardContent>
         </Card>
@@ -211,7 +211,7 @@ export function TransactionHistory({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              {formatCurrency(summary.totalOutgoing, 'IDR')}
+              {formatCurrency(summary.totalOutgoing)}
             </div>
           </CardContent>
         </Card>

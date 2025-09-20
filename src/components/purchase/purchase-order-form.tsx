@@ -293,8 +293,7 @@ export function PurchaseOrderForm({
                   Subtotal:{' '}
                   {formatCurrency(
                     (form.watch(`items.${index}.quantity`) || 0) *
-                      (form.watch(`items.${index}.unitPrice`) || 0),
-                    'IDR',
+                      (form.watch(`items.${index}.unitPrice`) || 0)
                   )}
                 </div>
               </div>
@@ -343,7 +342,7 @@ export function PurchaseOrderForm({
           </CardContent>
           <CardFooter className="flex justify-between">
             <div className="text-lg font-semibold">
-              Total: {formatCurrency(orderTotal, 'IDR')}
+              Total: {formatCurrency(orderTotal)}
             </div>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Creating Order...' : 'Create Purchase Order'}
