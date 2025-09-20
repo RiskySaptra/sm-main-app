@@ -1,0 +1,39 @@
+'use client';
+
+import * as React from 'react';
+import { StockMovement } from '@/components/inventory/stock-movement';
+import { mockStockMovements } from '@/lib/mock-data';
+import { Skeleton } from '@/components/ui/skeleton';
+
+export function MovementsTab() {
+  const [loading, setLoading] = React.useState(true);
+  const [movements, setMovements] = React.useState([]);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setMovements(mockStockMovements as any);
+      setLoading(false);
+    }, 500); // Simulate network delay
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleAddMovement = () => {
+    // TODO: Implement add movement functionality
+    console.log('Add movement clicked');
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  return <StockMovement movements={movements} onAddMovement={handleAddMovement} />;
+}

@@ -27,7 +27,7 @@ const Header = () => {
   };
 
   return (
-    <header className="p-4 flex justify-between items-center border-b">
+    <header className="p-4 flex justify-between items-center border-b shadow-sm">
       <div className="flex items-center space-x-4">
         <Breadcrumb />
       </div>

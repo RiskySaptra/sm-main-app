@@ -79,12 +79,12 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-card border-r h-full">
-      <div className="p-4">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Store Management</h2>
-        </div>
-        <nav className="space-y-2">
+    <aside className="w-64 bg-card border-r h-full flex flex-col">
+      <div className="p-4 border-b">
+        <h2 className="text-lg font-bold">Store Management</h2>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <nav className="p-4 space-y-2">
           {mainNavItems.map((item) => (
             <NavItemComponent
               key={item.href}
@@ -93,7 +93,7 @@ const Sidebar = () => {
             />
           ))}
           <Separator className="my-4" />
-          <p className="text-sm font-medium text-muted-foreground mb-2">Administration</p>
+          <p className="text-sm font-bold text-muted-foreground mb-2">Administration</p>
           {backofficeNavItems.map((item) => (
             <NavItemComponent
               key={item.href}
