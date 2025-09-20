@@ -39,6 +39,7 @@ const orderItemSchema = z.object({
   inventoryItemId: z.string().min(1, 'Item name is required'),
   quantity: z.number().min(1, 'Quantity must be at least 1'),
   unitPrice: z.number().min(0, 'Unit price must be positive'),
+  batchNumber: z.string().optional(),
 });
 
 const purchaseOrderSchema = z.object({
@@ -232,7 +233,20 @@ export function PurchaseOrderForm({
                   />
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-4">
+                <div className="grid gap-4 md:grid-cols-5">
+                  <FormField
+                    control={form.control}
+                    name={`items.${index}.batchNumber`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Batch Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., BATCH-001" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name={`items.${index}.quantity`}
@@ -309,6 +323,7 @@ export function PurchaseOrderForm({
                   inventoryItemId: '',
                   quantity: 1,
                   unitPrice: 0,
+                  batchNumber: '',
                 })
               }
             >
